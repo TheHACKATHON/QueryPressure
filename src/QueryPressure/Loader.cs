@@ -59,9 +59,11 @@ internal class Loader
 
   private ApplicationArguments Merge(string[] args)
   {
-    var configExtenstions = new[] { ".yml", ".yaml" };
-    var configFiles = args.Where(x => configExtenstions.Contains(Path.GetExtension(x)));
-    var scriptFile = args.Single(x => Path.GetExtension(x) == ".sql");
+    var configExtensions = new[] { ".yml", ".yaml" };
+    var scriptExtensions = new[] { ".sql", ".lua" };
+
+    var configFiles = args.Where(x => configExtensions.Contains(Path.GetExtension(x)));
+    var scriptFile = args.Single(x => scriptExtensions.Contains(Path.GetExtension(x)));
 
     var result = new ApplicationArguments();
     foreach (var configFile in configFiles)
