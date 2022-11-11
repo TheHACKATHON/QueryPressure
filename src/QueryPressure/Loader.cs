@@ -2,15 +2,11 @@
 using QueryPressure.App;
 using QueryPressure.App.Arguments;
 using QueryPressure.Core;
-using QueryPressure.Postgres.App;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 internal class Loader
 {
-  public Loader()
-  {
-  }
 
   public IContainer Load(string[] args)
   {
@@ -19,7 +15,6 @@ internal class Loader
 
     builder.RegisterInstance(appArgs).AsSelf();
     builder.RegisterModule<AppModule>();
-    builder.RegisterModule<PostgresAppModule>();
     LoadPlugins(builder);
         
     return builder.Build();

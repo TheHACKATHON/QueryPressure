@@ -1,8 +1,10 @@
 ﻿using QueryPressure.App.Arguments;
 using QueryPressure.App.Interfaces;
+using QueryPressure.Core;
 using QueryPressure.Core.Interfaces;
 using QueryPressure.Postgres.Core;
 
+[assembly: QueryPressurePlugin]
 namespace QueryPressure.Postgres.App;
 
 public class PostgresConnectionProviderCreator : ICreator<IConnectionProvider>
