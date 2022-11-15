@@ -3,10 +3,20 @@
 using Autofac;
 using QueryPressure.App.Arguments;
 using QueryPressure.App.Interfaces;
+using QueryPressure.Exceptions;
 
 var loader = new Loader();
 
-var container = loader.Load(args);
+IContainer container;
+
+try
+{
+  container = loader.Load(args);
+}
+catch (ArgumentsParseException)
+{
+  return;
+}
 
 var builder = container.Resolve<IScenarioBuilder>();
 var appArgs = container.Resolve<ApplicationArguments>();

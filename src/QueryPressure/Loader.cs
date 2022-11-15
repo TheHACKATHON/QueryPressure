@@ -1,10 +1,14 @@
 ﻿using Autofac;
+using CommandLine;
+using QueryPressure;
 using QueryPressure.App;
 using QueryPressure.App.Arguments;
 using QueryPressure.Core;
+using QueryPressure.Exceptions;
 using QueryPressure.Postgres.App;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+
 
 internal class Loader
 {
@@ -59,12 +63,12 @@ internal class Loader
 
   private ApplicationArguments Merge(string[] args)
   {
-    var configExtenstions = new[] { ".yml", ".yaml" };
-    var configFiles = args.Where(x => configExtenstions.Contains(Path.GetExtension(x)));
-    var scriptFile = args.Single(x => Path.GetExtension(x) == ".sql");
+    ParserResult<CommandLineOptions>? parseResult = Parser.Default.ParseArguments<CommandLineOptions>(args)
+      .WithNotParsed(_ => throw new ArgumentsParseException());
 
+    CommandLineOptions options = parseResult.Value;
     var result = new ApplicationArguments();
-    foreach (var configFile in configFiles)
+    foreach (var configFile in options.ConfigFiles)
     {
       var appArgs = Deserialize(File.ReadAllText(configFile));
       foreach (var applicationArgument in appArgs)
@@ -76,7 +80,7 @@ internal class Loader
     result.Add("script", new ArgumentsSection() {
       Type = "file",
       Arguments = new() {
-        ["path"] = scriptFile
+        ["path"] = options.ScriptFile
       }
     });
 
